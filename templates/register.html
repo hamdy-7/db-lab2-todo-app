@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <div class="container mt-5" style="max-width: 450px;">
+        <div class="card shadow-sm p-4">
+            <h3 class="mb-4 text-center">Create Account</h3>
+            
+            {% if errors %}
+                <div class="alert alert-danger">
+                    <ul class="mb-0">
+                    {% for error in errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+
+            <form action="/register" method="POST" id="registerForm">
+                <div class="mb-3">
+                    <label class="form-label">Name</label>
+                    <input type="text" name="name" class="form-control" value="{{ name or '' }}">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Email</label>
+                    <input type="email" name="email" class="form-control" value="{{ email or '' }}">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Password</label>
+                    <input type="password" name="password" class="form-control">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Confirm Password</label>
+                    <input type="password" name="confirm_password" class="form-control">
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Register</button>
+            </form>
+            <div class="mt-3 text-center">
+                <span>Already have an account? <a href="/login">Login here</a></span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            const name = document.getElementsByName('name')[0].value.trim();
+            const email = document.getElementsByName('email')[0].value.trim();
+            const password = document.getElementsByName('password')[0].value;
+            const confirm_password = document.getElementsByName('confirm_password')[0].value;
+            let errors = [];
+
+            if (!name) errors.push('Name is required');
+            if (!email) errors.push('Email is required');
+            if (!password) errors.push('Password is required');
+            if (!confirm_password) errors.push('Confirm password is required');
+            if (password && confirm_password && password !== confirm_password) {
+                errors.push('Passwords do not match');
+            }
+
+            if (errors.length > 0) {
+                e.preventDefault();
+                alert(errors.join('\n'));
+            }
+        });
+    </script>
+</body>
+</html>
